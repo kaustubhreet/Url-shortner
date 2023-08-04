@@ -3,8 +3,10 @@ import mongoose from 'mongoose';
 import shortid from 'shortid';
 import Connection from './database.js';
 import bodyParser from 'body-parser';
+import cors from 'cors';
 
 const app = express();
+app.use(cors());//allow cross site http request
 
 //connect to MongoDB
 //create schema for URL
@@ -43,9 +45,10 @@ app.get('/urls', async (req, res) => {
 });
 
 //create route for redirecting short url to long url
-app.get('/:urls', async (req, res) => {
+app.get('/:id', async (req, res) => {
     try {
-        const url = await URL.findOne({ shortUrl: req.params.urls });
+        const url = await URL.findOne({ _id: req.params.id });
+        console.log(url);
         if (!url) {
             return res.status(404).json({ message: 'URL not found' });
         }
@@ -69,7 +72,7 @@ app.delete('/:id',async(req,res)=>{
 });
 
 
-app.listen(3000, () => {
+app.listen(5000, () => {
     Connection("kaustubh","kaustubh");
-    console.log('Server started on port 3000');
+    console.log('Server started on port 5000');
 });
